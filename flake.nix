@@ -22,13 +22,13 @@
     };
   in rec {
     packages = {
-      #emacs = pkgs.callPackage ./emacs {};
-      emacs = pkgs.emacsPgtkNativeComp;
+      emacs = pkgs.callPackage ./emacs {};
     };
 
     apps = rec {
       emacs = flake-utils.lib.mkApp {
         drv = packages.emacs;
+        name = "emacs";
       };
       default = emacs;
     };

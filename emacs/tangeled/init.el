@@ -16,11 +16,11 @@
 (use-package general
   :ensure t
   :config
-  (general-create-definer custom-leader-keys
+  (general-create-definer my-leader-def
     :keymaps '(normal insert visual emacs)
     :prefix "SPC"
     :global-prefix "C-SPC")
-  (custom-leader-keys
+  (defun my-leader-def ()
     "a" '(:ignore a :which-key "appearance")
     "at" '(consult-theme :which-key "choose theme")
     "as" '(text-scale-adjust :which-key "adjust text size")
@@ -47,7 +47,8 @@
     "sb" '(consult-buffer :which-key "buffer")
     "sp" '(project-switch-project :which-key "project")
     ;; TODO open file vertically or horicontally
-    "sf" '(project-find-file :which-key "file")))
+    "sf" '(project-find-file :which-key "file"))
+  )
 
 (use-package evil
   :ensure t
@@ -157,7 +158,7 @@
 
 (use-package corfu
   :ensure t
-  :init (corfu-global-mode)
+  :init (global-corfu-mode)
   :custom
   (corfu-cycle t)
   :general
@@ -302,7 +303,7 @@
 
 (dolist (mode '(prog-mode-hook
                 text-mode-hook))
-  (add-hook mode '(lambda()
+  (add-hook mode #'(lambda()
                     (set-fill-column 78)
                     (auto-fill-mode)
                     (display-fill-column-indicator-mode))))

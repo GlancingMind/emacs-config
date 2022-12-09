@@ -1,12 +1,13 @@
 {
   mkShellNoCC,
-  emacsPgtkNativeComp
+  emacsPgtkNativeComp,
+  emacs-all-the-icons-fonts
 }:
 
 mkShellNoCC {
   packages = [
     # put packages here
-    emacsPgtkNativeComp
+    emacs-all-the-icons-fonts
   ];
 
   shellHook = ''
