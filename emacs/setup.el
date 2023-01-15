@@ -120,6 +120,17 @@
       '("<escape>" . ignore))
     (meow-global-mode 0))
 
+
+(use-package elfeed
+  :ensure t
+  :config
+  (setq elfeed-show-entry-switch 'display-buffer))
+
+(use-package elfeed-org
+  :ensure t
+  :config
+  (elfeed-org))
+
 (use-package avy
   :ensure t
   :commands (avy-goto-char avy-goto-word-0 avy-goto-line))
