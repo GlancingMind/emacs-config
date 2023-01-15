@@ -131,6 +131,12 @@
   :config
   (elfeed-org))
 
+(use-package tex
+  :ensure auctex
+  :hook (LaTex-mode . (lambda ()
+                        (push (list 'output-pdf "Zathura")
+                              TeX-view-program-selection))))
+
 (use-package avy
   :ensure t
   :commands (avy-goto-char avy-goto-word-0 avy-goto-line))
