@@ -1,11 +1,18 @@
 {
+  buildEnv,
   emacsWithPackagesFromUsePackage,
-  emacsPgtkNativeComp,
+  emacsPgtk,
+  emacs-all-the-icons-fonts,
 }:
 
-emacsWithPackagesFromUsePackage {
-  package = emacsPgtkNativeComp;
-  config = ./tangeled/init.el;
-  defaultInitFile = true;
-  alwaysTangle = true;
+buildEnv {
+  name = "emacs-env";
+  paths = [
+    (emacsWithPackagesFromUsePackage {
+      package = emacsPgtk;
+      config = ./setup.el;
+      defaultInitFile = true;
+    })
+    emacs-all-the-icons-fonts
+  ];
 }

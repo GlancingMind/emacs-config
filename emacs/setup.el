@@ -6,77 +6,119 @@
 (unless package-archive-contents
   (package-refresh-contents))
 
-;; Initialize use-package on non-Linux platforms
-(unless (package-installed-p 'use-package)
-  (package-install 'use-package))
-
 (require 'use-package)
-(setq use-package-always-ensure t)
 
-(use-package general
+(set-frame-parameter nil 'alpha-background 100)
+(add-to-list 'default-frame-alist '(alpha-background . 100))
+
+(defun toggle-transparency ()
+  "Toggle transparency."
+  (interactive)
+  (let ((alpha-background (frame-parameter nil 'alpha-background)))
+    (set-frame-parameter nil 'alpha-background
+     (if (eql (cond ((numberp alpha-background) alpha-background)
+                    ((numberp (cdr alpha-background)) (cdr alpha-background))
+                    )
+              100)
+         '75 '100))))
+
+(use-package writeroom-mode
+  :ensure t)
+
+(use-package xah-fly-keys
   :ensure t
   :config
-  (general-create-definer my-leader-def
-    :keymaps '(normal insert visual emacs)
-    :prefix "SPC"
-    :global-prefix "C-SPC")
-  (defun my-leader-def ()
-    "a" '(:ignore a :which-key "appearance")
-    "at" '(consult-theme :which-key "choose theme")
-    "as" '(text-scale-adjust :which-key "adjust text size")
+  (xah-fly-keys-set-layout "qwertz"))
 
-    "w" '(:ignore a :which-key "window")
-    "wd" '(ace-delete-window :which-key "delete")
-    "ws" '(ace-swap-window :which-key "swap")
-    "wj" '(ace-select-window :which-key "select")
-    "wb" '(split-window-below :which-key "new window below")
-    "wr" '(split-window-right :which-key "new window to the right")
-    "wo" '(ace-delete-other-windows :which-key "close all except")
-
-    ;; This are keys to find something (with an UNKOWN location)
-    "f" '(:ignore s :which-key "find")
-    "fl" '(consult-line :which-key "line")
-    "ff" '(project-find-file :which-key "file")
-
-    ;; This are keys to jump fast to some KNOWN location
-    ;; NOTE could also rename to "go to"
-    "s" '(:ignore s :which-key "switch to")
-    "sc" '(avy-goto-char :which-key "character")
-    "sl" '(avy-goto-line :which-key "line")
-    "sw" '(avy-goto-word-0 :which-key "word")
-    "sb" '(consult-buffer :which-key "buffer")
-    "sp" '(project-switch-project :which-key "project")
-    ;; TODO open file vertically or horicontally
-    "sf" '(project-find-file :which-key "file"))
-  )
-
-(use-package evil
+(use-package meow
   :ensure t
   :custom
-  (evil-want-keybinding nil) ; will use evil-collection for this
-  (evil-want-C-u-scroll t)
+    (meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
   :config
-  (evil-mode 1)
-  ;; Start following modes in normal mode
-  (evil-set-initial-state 'messages-buffer-mode 'normal)
-  (evil-set-initial-state 'dashboard-mode 'normal)
-  (general-def "<escape>" 'keyboard-escape-quit)
-  (general-def 'insert "ö" 'hydra-insert-cmds/body)
-  (general-def 'motion
-    ;; Move through soft wrapped lines as if they where hard wrapped
-    "j" 'evil-next-visual-line
-    "k" 'evil-previous-visual-line)
-  (general-def 'normal
-    ":" 'evil-repeat
-    "." 'evil-ex
-    "C-i" 'evil-jump-forward
-    "C-p" 'consult-buffer))
-
-(use-package evil-collection
-  :ensure t
-  :after evil
-  :config
-  (evil-collection-init))
+    (meow-motion-overwrite-define-key
+      '("j" . meow-next)
+      '("k" . meow-prev)
+      '("<escape>" . ignore))
+    (meow-leader-define-key
+      ;; SPC j/k will run the original command in MOTION state.
+      '("j" . "H-j")
+      '("k" . "H-k")
+      ;; Use SPC (0-9) for digit arguments.
+      '("1" . meow-digit-argument)
+      '("2" . meow-digit-argument)
+      '("3" . meow-digit-argument)
+      '("4" . meow-digit-argument)
+      '("5" . meow-digit-argument)
+      '("6" . meow-digit-argument)
+      '("7" . meow-digit-argument)
+      '("8" . meow-digit-argument)
+      '("9" . meow-digit-argument)
+      '("0" . meow-digit-argument)
+      '("/" . meow-keypad-describe-key)
+      '("?" . meow-cheatsheet))
+    (meow-normal-define-key
+      '("0" . meow-expand-0)
+      '("9" . meow-expand-9)
+      '("8" . meow-expand-8)
+      '("7" . meow-expand-7)
+      '("6" . meow-expand-6)
+      '("5" . meow-expand-5)
+      '("4" . meow-expand-4)
+      '("3" . meow-expand-3)
+      '("2" . meow-expand-2)
+      '("1" . meow-expand-1)
+      '("-" . negative-argument)
+      '(";" . meow-reverse)
+      '("," . meow-inner-of-thing)
+      '("." . meow-bounds-of-thing)
+      '("[" . meow-beginning-of-thing)
+      '("]" . meow-end-of-thing)
+      '("a" . meow-append)
+      '("A" . meow-open-below)
+      '("b" . meow-back-word)
+      '("B" . meow-back-symbol)
+      '("c" . meow-change)
+      '("d" . meow-delete)
+      '("D" . meow-backward-delete)
+      '("e" . meow-next-word)
+      '("E" . meow-next-symbol)
+      '("f" . meow-find)
+      '("g" . meow-cancel-selection)
+      '("G" . meow-grab)
+      '("h" . meow-left)
+      '("H" . meow-left-expand)
+      '("i" . meow-insert)
+      '("I" . meow-open-above)
+      '("j" . meow-next)
+      '("J" . meow-next-expand)
+      '("k" . meow-prev)
+      '("K" . meow-prev-expand)
+      '("l" . meow-right)
+      '("L" . meow-right-expand)
+      '("m" . meow-join)
+      '("n" . meow-search)
+      '("o" . meow-block)
+      '("O" . meow-to-block)
+      '("p" . meow-yank)
+      '("q" . meow-quit)
+      '("Q" . meow-goto-line)
+      '("r" . meow-replace)
+      '("R" . meow-swap-grab)
+      '("s" . meow-kill)
+      '("t" . meow-till)
+      '("u" . meow-undo)
+      '("U" . meow-undo-in-selection)
+      '("v" . meow-visit)
+      '("w" . meow-mark-word)
+      '("W" . meow-mark-symbol)
+      '("x" . meow-line)
+      '("X" . meow-goto-line)
+      '("y" . meow-save)
+      '("Y" . meow-sync-grab)
+      '("z" . meow-pop-selection)
+      '("'" . repeat)
+      '("<escape>" . ignore))
+    (meow-global-mode 1))
 
 (use-package avy
   :ensure t
@@ -103,25 +145,6 @@
      (?? aw-show-dispatch-help "help"))
    "List of actions for `aw-dispatch-default`.")
   :bind ("M-o" . ace-window))
-
-(use-package hydra :ensure t)
-
-(defhydra hydra-insert-cmds ()
-  "Commands"
-  ("ö" (insert "ö") "insert (leader) ö" :exit t)
-  ("e" execute-extended-command "execute" :exit t)
-  ("." evil-ex "evil ex" :exit t)
-  ("C-d" evil-window-delete "close window" :exit t)
-  ("wc" evil-window-delete "close window" :exit t)
-  ("o" evil-window-next "next window")
-  ("j" hydra-jump/body "Jump" :exit t)
-  ("f" nil "finished" :exit t))
-(defhydra hydra-jump ()
-  "jump"
-  ("c" avy-goto-char "to character" :exit t)
-  ("w" avy-goto-word-0 "to word" :exit t)
-  ("l" avy-goto-line "to line" :exit t)
-  ("f" nil "finished" :exit t))
 
 (use-package vertico
   :ensure t
@@ -284,7 +307,8 @@
 (tooltip-mode -1)       ; Disable tooltips
 (set-fringe-mode 10)    ; Give some breathing room
 
-(use-package all-the-icons)
+(use-package all-the-icons
+  :ensure t)
 
 (use-package doom-themes
   :ensure t
