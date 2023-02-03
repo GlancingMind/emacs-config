@@ -25,111 +25,151 @@
 (use-package writeroom-mode
   :ensure t)
 
-(use-package xah-fly-keys
-  :ensure t
-  :config
-  (xah-fly-keys-set-layout "qwertz"))
+;(use-package xah-fly-keys
+;  :ensure t
+;  :config
+;  (xah-fly-keys-set-layout "qwertz"))
 
 (use-package meow
   :ensure t
-  :custom
-    (meow-cheatsheet-layout meow-cheatsheet-layout-qwerty)
   :config
+    (defconst meow-cheatsheet-layout-qwertz-deDE
+      '((<TLDE> "^" "°") (<AE01> "1" "!") (<AE02> "2" "\"") (<AE03> "3" "§") (<AE04> "4" "$") (<AE05> "5" "%") (<AE06> "6" "&")
+                         (<AE07> "7" "/") (<AE08> "8" "(") (<AE09> "9" ")") (<AE10> "0" "=") (<AE11> "ß" "?") (<AE12> "´" "`") (<AD01> "q" "Q")
+                         (<AD02> "w" "W") (<AD03> "e" "E") (<AD04> "r" "R") (<AD05> "t" "T") (<AD06> "z" "Z") (<AD07> "u" "U") (<AD08> "i" "I")
+                         (<AD09> "o" "O") (<AD10> "p" "P") (<AD11> "ü" "Ü") (<AD12> "+" "*") (<AC01> "a" "A") (<AC02> "s" "S") (<AC03> "d" "D")
+                         (<AC04> "f" "F") (<AC05> "g" "G") (<AC06> "h" "H") (<AC07> "j" "J") (<AC08> "k" "K") (<AC09> "l" "L") (<AC10> "ö" "Ö")
+                         (<AC11> "ä" "Ä") (<BKSL> "#" "'") (<LSGT> "<" ">") (<AB01> "y" "Y") (<AB02> "x" "X") (<AB03> "c" "C") (<AB04> "v" "V")
+                         (<AB05> "b" "B") (<AB06> "n" "N") (<AB07> "m" "M") (<AB08> "," ";") (<AB09> "." ":") (<AB10> "-" "_")))
+    (setq meow-cheatsheet-layout meow-cheatsheet-layout-qwertz-deDE)
+    (setq meow-cheatsheet-physical-layout meow-cheatsheet-physical-layout-iso)
+    (meow-define-keys 'insert '("C-c" . meow-normal-mode))
     (meow-motion-overwrite-define-key
-      '("j" . meow-next)
-      '("k" . meow-prev)
-      '("<escape>" . ignore))
+     '("j" . meow-next)
+     '("k" . meow-prev)
+     '("<escape>" . ignore))
     (meow-leader-define-key
-      ;; SPC j/k will run the original command in MOTION state.
-      '("j" . "H-j")
-      '("k" . "H-k")
-      ;; Use SPC (0-9) for digit arguments.
-      '("1" . meow-digit-argument)
-      '("2" . meow-digit-argument)
-      '("3" . meow-digit-argument)
-      '("4" . meow-digit-argument)
-      '("5" . meow-digit-argument)
-      '("6" . meow-digit-argument)
-      '("7" . meow-digit-argument)
-      '("8" . meow-digit-argument)
-      '("9" . meow-digit-argument)
-      '("0" . meow-digit-argument)
-      '("ß" . meow-keypad-describe-key)
-      '("´" . meow-cheatsheet))
+     ;; SPC j/k will run the original command in MOTION state.
+     '("j" . "H-j")
+     '("k" . "H-k")
+     ;; Use SPC (0-9) for digit arguments.
+     '("1" . meow-digit-argument)
+     '("2" . meow-digit-argument)
+     '("3" . meow-digit-argument)
+     '("4" . meow-digit-argument)
+     '("5" . meow-digit-argument)
+     '("6" . meow-digit-argument)
+     '("7" . meow-digit-argument)
+     '("8" . meow-digit-argument)
+     '("9" . meow-digit-argument)
+     '("0" . meow-digit-argument)
+     '("/" . meow-keypad-describe-key)
+     '("?" . meow-cheatsheet))
     (meow-normal-define-key
-      '("0" . meow-expand-0)
-      '("9" . meow-expand-9)
-      '("8" . meow-expand-8)
-      '("7" . meow-expand-7)
-      '("6" . meow-expand-6)
-      '("5" . meow-expand-5)
-      '("4" . meow-expand-4)
-      '("3" . meow-expand-3)
-      '("2" . meow-expand-2)
-      '("1" . meow-expand-1)
-      '("ß" . negative-argument)
-      '("ö" . meow-reverse)
-      '("," . meow-inner-of-thing)
-      '("." . meow-bounds-of-thing)
-      '("ü" . meow-beginning-of-thing)
-      '("+" . meow-end-of-thing)
-      '("a" . meow-append)
-      '("A" . meow-open-below)
-      '("b" . meow-back-word)
-      '("B" . meow-back-symbol)
-      '("c" . meow-change)
-      '("d" . meow-delete)
-      '("D" . meow-backward-delete)
-      '("e" . meow-next-word)
-      '("E" . meow-next-symbol)
-      '("f" . meow-find)
-      '("g" . meow-cancel-selection)
-      '("G" . meow-grab)
-      '("h" . meow-left)
-      '("H" . meow-left-expand)
-      '("i" . meow-insert)
-      '("I" . meow-open-above)
-      '("j" . meow-next)
-      '("J" . meow-next-expand)
-      '("k" . meow-prev)
-      '("K" . meow-prev-expand)
-      '("l" . meow-right)
-      '("L" . meow-right-expand)
-      '("m" . meow-join)
-      '("n" . meow-search)
-      '("o" . meow-block)
-      '("O" . meow-to-block)
-      '("p" . meow-yank)
-      '("q" . meow-quit)
-      '("Q" . meow-goto-line)
-      '("r" . meow-replace)
-      '("R" . meow-swap-grab)
-      '("s" . meow-kill)
-      '("t" . meow-till)
-      '("u" . meow-undo)
-      '("U" . meow-undo-in-selection)
-      '("v" . meow-visit)
-      '("w" . meow-mark-word)
-      '("W" . meow-mark-symbol)
-      '("x" . meow-line)
-      '("X" . meow-goto-line)
-      '("z" . meow-save)
-      '("Z" . meow-sync-grab)
-      '("y" . meow-pop-selection)
-      '("ä" . repeat)
-      '("<escape>" . ignore))
-    (meow-global-mode 0))
+     '("0" . meow-expand-0)
+     '("9" . meow-expand-9)
+     '("8" . meow-expand-8)
+     '("7" . meow-expand-7)
+     '("6" . meow-expand-6)
+     '("5" . meow-expand-5)
+     '("4" . meow-expand-4)
+     '("3" . meow-expand-3)
+     '("2" . meow-expand-2)
+     '("1" . meow-expand-1)
+     '("-" . negative-argument)
+     '(";" . meow-reverse)
+     '("," . meow-inner-of-thing)
+     '("." . meow-bounds-of-thing)
+     '("§" . ido-find-file)
+     '("a" . meow-append)
+     '("A" . meow-open-below)
+     '("b" . meow-back-word)
+     '("B" . meow-back-symbol)
+     '("c" . meow-change)
+     '("d" . meow-delete)
+     '("D" . meow-backward-delete)
+     '("e" . meow-next-word)
+     '("E" . meow-next-symbol)
+     '("f" . meow-find)
+     '("g" . meow-cancel-selection)
+     '("G" . meow-grab)
+     '("h" . meow-left)
+     '("H" . meow-left-expand)
+     '("i" . meow-insert)
+     '("I" . meow-open-above)
+     '("j" . meow-next)
+     '("J" . meow-next-expand)
+     '("k" . meow-prev)
+     '("K" . meow-prev-expand)
+     '("l" . meow-right)
+     '("L" . meow-right-expand)
+     '("m" . meow-join)
+     '("M" . magit)
+     '("n" . meow-search)
+     '("N" . display-line-numbers-mode)
+     '("o" . meow-block)
+     '("O" . meow-to-block)
+     '("p" . meow-yank)
+     '("P" . previous-buffer)
+     '("q" . meow-quit)
+     '("Q" . meow-goto-line)
+     '("r" . meow-replace)
+     '("R" . meow-swap-grab)
+     '("s" . meow-kill)
+     '("S" . text-scale-decrease)
+     '("t" . meow-till)
+     '("T" . vterm-toggle)
+     '("u" . meow-undo)
+     '("U" . meow-undo-in-selection)
+     '("v" . meow-visit)
+     '("V" . text-scale-increase)
+     '("w" . meow-mark-word)
+     '("W" . meow-mark-symbol)
+     '("x" . meow-line)
+     '("X" . meow-goto-line)
+     '("y" . meow-save)
+     '("Y" . meow-sync-grab)
+     '("z" . meow-pop-selection)
+     '("å" . ido-find-file)
+     '("ä" . meow-end-of-thing)
+     '("Ä" . eglot-find-declaration)
+     '("ö" . meow-beginning-of-thing)
+     '("Ö" . eglot-find-implementation)
+     '("'" . repeat)
+     '("<escape>" . ignore))
+  (meow-global-mode +1))
 
 
 (use-package elfeed
   :ensure t
-  :config
-  (setq elfeed-show-entry-switch 'display-buffer))
+  :custom
+  (elfeed-show-entry-switch 'display-buffer))
 
 (use-package elfeed-org
   :ensure t
+  :after elfeed
   :config
-  (elfeed-org))
+  (elfeed-org)
+  :custom
+  (rmh-elfeed-org-files (list "~/.emacs.d/elfeed.org")))
+
+(use-package elfeed-dashboard
+  :ensure t
+  :after elfeed
+  :config
+  (advice-add 'elfeed-search-quit-window :after #'elfeed-dashboard-update-links)
+  :custom
+  (elfeed-dashboard-file "~/.emacs.d/elfeed-dashboard.org"))
+
+(use-package elfeed-tube
+  :ensure t
+  :after elfeed
+  :config
+  (elfeed-tube-setup))
+
+(use-package elfeed-tube-mpv
+  :ensure t
+  :after elfeed-tube)
 
 (use-package tex
   :ensure auctex
@@ -226,8 +266,6 @@
   :diminish which-key-mode
   :custom
   (which-key-idle-delay 0.1))
-
-
 
 (use-package editorconfig
   :ensure t
