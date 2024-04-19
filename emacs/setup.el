@@ -1,3 +1,7 @@
+; TODO setup https://github.com/davidshepherd7/frames-only-mode
+; TODO setup email
+; TODO setup dashboard with reminders (org-agenda maybe?)
+
 (require 'package)
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                          ("org" . "https://orgmode.org/elpa/")
@@ -24,11 +28,6 @@
 
 (use-package writeroom-mode
   :ensure t)
-
-;(use-package xah-fly-keys
-;  :ensure t
-;  :config
-;  (xah-fly-keys-set-layout "qwertz"))
 
 (use-package meow
   :ensure t
@@ -139,6 +138,16 @@
      '("<escape>" . ignore))
   (meow-global-mode +1))
 
+(use-package dashboard
+  :ensure t
+  :custom
+  (dashboard-items '((agenda . 5)))
+  (dashboard-banner-logo-title "Startup finished!")
+  (dashboard-startup-banner nil)
+  (dashboard-center-content t)
+  (dashboard-set-footer nil)
+  :init
+  (dashboard-setup-startup-hook))
 
 (use-package elfeed
   :ensure t
@@ -153,13 +162,17 @@
   :custom
   (rmh-elfeed-org-files (list "~/.emacs.d/elfeed.org")))
 
-(use-package elfeed-dashboard
+(use-package elfeed-summary
   :ensure t
   :after elfeed
-  :config
-  (advice-add 'elfeed-search-quit-window :after #'elfeed-dashboard-update-links)
   :custom
-  (elfeed-dashboard-file "~/.emacs.d/elfeed-dashboard.org"))
+  (:original-order . t))
+
+;(use-package page-break-lines
+;  :ensure t
+;  :after dashboard
+;  :init
+;  global-page-break-lines-mode)
 
 (use-package elfeed-tube
   :ensure t
@@ -177,9 +190,9 @@
                         (push (list 'output-pdf "Zathura")
                               TeX-view-program-selection))))
 
-(use-package avy
-  :ensure t
-  :commands (avy-goto-char avy-goto-word-0 avy-goto-line))
+;(use-package avy
+;  :ensure t
+;  :commands (avy-goto-char avy-goto-word-0 avy-goto-line))
 
 (use-package ace-window
   :ensure t
@@ -351,6 +364,8 @@
    '((emacs-lisp . t)
      (shell . t))))
 
+(setq inhibit-startup-screen t)
+;(setq initial-buffer-choice nil)    ; Remove startup message
 (setq ring-bell-function 'ignore)   ; Disable alarm bell
 (setq inhibit-startup-message t)    ; Remove startup message
 (setq initial-scratch-message "Ready for work? Use C-h for help.")
@@ -403,8 +418,6 @@
 (setq epg-pinentry-mode 'loopback)
 
 ;; (use-package password-store) ; auth-source-pass
-
-;; (use-package hercules)
 
 (use-package esup
   :ensure t

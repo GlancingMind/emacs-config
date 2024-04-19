@@ -1,7 +1,7 @@
 {
   buildEnv,
   emacsWithPackagesFromUsePackage,
-  emacsPgtk,
+  emacs29-pgtk,
   emacs-all-the-icons-fonts,
 }:
 
@@ -9,7 +9,7 @@ buildEnv {
   name = "emacs-env";
   paths = [
     (emacsWithPackagesFromUsePackage {
-      package = emacsPgtk;
+      package = emacs29-pgtk;
       config = ./setup.el;
       defaultInitFile = true;
     })
